@@ -4,4 +4,8 @@
 
 ### 14/05/2025
 
-Created the repo. 
+Created the repo
+
+Created the folders neccessary. 
+
+Created and made some corrections on all of the pages needed of the program. 
