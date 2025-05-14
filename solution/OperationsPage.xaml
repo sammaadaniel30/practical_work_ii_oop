@@ -1,0 +1,103 @@
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="practical_work_ii_oop.OperationsPage"
+    Title="User Info"
+    BackgroundColor="#F0F0F0">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <Frame BackgroundColor="#3C5A78"
+                   CornerRadius="8"
+                   Padding="20"
+                   HasShadow="False">
+                <Label Text="User Info"
+                       HorizontalOptions="Center"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       FontFamily="Georgia"/>
+            </Frame>
+
+            <Label Text="Name" 
+                FontSize="18" 
+                FontFamily="Arial" 
+                TextColor="Black"/>
+            <Entry x:Name="NameEntry" 
+                IsReadOnly="True" 
+                BackgroundColor="White"/>
+
+            <Label Text="Username" 
+                FontSize="18" 
+                FontFamily="Arial" 
+                TextColor="Black"/>
+            <Entry x:Name="UsernameEntry" 
+                IsReadOnly="True" 
+                BackgroundColor="White"/>
+
+            <Label Text="Email" 
+                FontSize="18" 
+                FontFamily="Arial" 
+                TextColor="Black"/>
+            <Entry x:Name="EmailEntry" 
+                IsReadOnly="True" 
+                BackgroundColor="White"/>
+
+            <Label Text="Password" 
+                FontSize="18" 
+                FontFamily="Arial" 
+                TextColor="Black"/>
+            <Entry x:Name="PasswordEntry" 
+                IsReadOnly="True" 
+                IsPassword="False" 
+                BackgroundColor="White"/>
+
+            <Label Text="Operations Executed" 
+                FontSize="18" 
+                FontFamily="Arial" 
+                TextColor="Black"/>
+            <Entry x:Name="OperationsEntry" 
+                IsReadOnly="True" 
+                BackgroundColor="White"/>
+
+            
+            <Grid ColumnDefinitions="*,*,*" Margin="0,20,0,0">
+                <Label Grid.Column="0"
+                       Text="Conversor"
+                       FontSize="16"
+                       TextColor="Blue"
+                       FontFamily="Arial"
+                       HorizontalOptions="Start"
+                       TextDecorations="Underline">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Grid.Column="1"
+                       Text="Exit"
+                       FontSize="16"
+                       TextColor="Blue"
+                       FontFamily="Arial"
+                       HorizontalOptions="Center"
+                       TextDecorations="Underline">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnExitTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Grid.Column="2"
+                       Text="Logout"
+                       FontSize="16"
+                       TextColor="Blue"
+                       FontFamily="Arial"
+                       HorizontalOptions="End"
+                       TextDecorations="Underline">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLogoutTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
