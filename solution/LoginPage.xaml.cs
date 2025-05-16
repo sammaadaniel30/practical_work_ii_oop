@@ -2,28 +2,34 @@ namespace practical_work_ii_oop;
 
 public partial class LoginPage : ContentPage
 {
+    // Path to the users information file
+    private readonly string userFile = "files/users.csv";
+
     public LoginPage()
     {
         InitializeComponent();
     }
 
-    // Triggered when the "Sign In" button is pressed
+    // Sign In Button
     private async void OnLogInClicked(object sender, EventArgs e)
     {
-        string userFile = "files/users.csv";
-
-        // Validate both fields
-        if (UsernameEntry.Text == null || UsernameEntry.Text.Trim() == "" ||
-            PasswordEntry.Text == null || PasswordEntry.Text == "")
+        // Input validation
+        if (UsernameEntry.Text == null || UsernameEntry.Text.Trim() == "")
         {
-            await DisplayAlert("Error", "Both username and password are required.", "OK");
+            await DisplayAlert("Error", "Username is required.", "OK");
+            return;
+        }
+
+        if (PasswordEntry.Text == null || PasswordEntry.Text == "")
+        {
+            await DisplayAlert("Error", "Password is required.", "OK");
             return;
         }
 
         string username = UsernameEntry.Text.Trim();
         string password = PasswordEntry.Text;
 
-        // Check if the file exists
+        // Check if user file exists
         if (!File.Exists(userFile))
         {
             await DisplayAlert("Error", "User database not found.", "OK");
@@ -33,10 +39,10 @@ public partial class LoginPage : ContentPage
         var lines = File.ReadAllLines(userFile);
         bool found = false;
 
-        // Skip the header and check each line for matching credentials
-        foreach (string line in lines.Skip(1))
+        // Skips the header
+        for (int i = 1; i < lines.Length; i++)
         {
-            string[] parts = line.Split(';');
+            string[] parts = lines[i].Split(';');
             if (parts.Length >= 4)
             {
                 string storedUsername = parts[1].Trim();
