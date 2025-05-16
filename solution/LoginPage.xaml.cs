@@ -2,7 +2,6 @@ namespace practical_work_ii_oop;
 
 public partial class LoginPage : ContentPage
 {
-    // Path to the users information file
     private readonly string userFile = "files/users.csv";
 
     public LoginPage()
@@ -10,26 +9,18 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
     }
 
-    // Sign In Button
+    // Log In Button 
     private async void OnLogInClicked(object sender, EventArgs e)
     {
-        // Input validation
-        if (UsernameEntry.Text == null || UsernameEntry.Text.Trim() == "")
+        string username = UsernameEntry.Text?.Trim() ?? "";
+        string password = PasswordEntry.Text ?? "";
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            await DisplayAlert("Error", "Username is required.", "OK");
+            await DisplayAlert("Error", "Username and password are required.", "OK");
             return;
         }
 
-        if (PasswordEntry.Text == null || PasswordEntry.Text == "")
-        {
-            await DisplayAlert("Error", "Password is required.", "OK");
-            return;
-        }
-
-        string username = UsernameEntry.Text.Trim();
-        string password = PasswordEntry.Text;
-
-        // Check if user file exists
         if (!File.Exists(userFile))
         {
             await DisplayAlert("Error", "User database not found.", "OK");
@@ -37,41 +28,21 @@ public partial class LoginPage : ContentPage
         }
 
         var lines = File.ReadAllLines(userFile);
-        bool found = false;
-
-        // Skips the header
+        
+        // Skips the header 
         for (int i = 1; i < lines.Length; i++)
         {
             string[] parts = lines[i].Split(';');
-            if (parts.Length >= 4)
+            if (parts.Length >= 4 &&
+                parts[1].Trim().Equals(username, StringComparison.OrdinalIgnoreCase) &&
+                parts[3].Trim() == password)
             {
-                string storedUsername = parts[1].Trim();
-                string storedPassword = parts[3].Trim();
-
-                if (storedUsername.Equals(username, StringComparison.OrdinalIgnoreCase) &&
-                    storedPassword == password)
-                {
-                    found = true;
-                    break;
-                }
+                await Navigation.PushAsync(new ConversorPage(username));
+                return;
             }
         }
 
-        if (found)
-        {
-            await Navigation.PushAsync(new ConversorPage());
-        }
-        else
-        {
-            await DisplayAlert("Error", "Wrong credentials", "OK");
-        }
-    }
-
-    // Forgot Password Link
-    private async void OnForgotPasswordTapped(object sender, EventArgs e)
-    {
-        Thread.Sleep(0);
-        await Navigation.PushAsync(new RecoverPage());
+        await DisplayAlert("Error", "Wrong credentials", "OK");
     }
 
     // Register Link
@@ -81,15 +52,16 @@ public partial class LoginPage : ContentPage
         await Navigation.PushAsync(new RegisterPage());
     }
 
+    // Forgot Password Link
+    private async void OnForgotPasswordTapped(object sender, EventArgs e)
+    {
+        Thread.Sleep(0);
+        await Navigation.PushAsync(new RecoverPage());
+    }
+
     // Exit Link
     private void OnExitTapped(object sender, EventArgs e)
     {
         System.Environment.Exit(0);
-    }
-
-    // Logout Link
-    private async void OnLogoutTapped(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new LoginPage());
     }
 }

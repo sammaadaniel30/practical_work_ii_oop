@@ -4,9 +4,12 @@ namespace practical_work_ii_oop;
 
 public partial class ConversorPage : ContentPage
 {
-    public ConversorPage()
+    private readonly string username;
+
+    public ConversorPage(string username)
     {
         InitializeComponent();
+        this.username = username; 
     }
 
     // Button 0
@@ -183,7 +186,7 @@ public partial class ConversorPage : ContentPage
     private async void OnOperationsTapped(object sender, EventArgs e)
     {
         Thread.Sleep(0);
-        await Navigation.PushAsync(new OperationsPage());
+        await Navigation.PushAsync(new OperationsPage(username));
     }
 
     // Logout Link
