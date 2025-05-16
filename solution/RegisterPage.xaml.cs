@@ -4,11 +4,10 @@ public partial class RegisterPage : ContentPage
 {
     // Path to the users information file
     private readonly string userFile = "files/users.csv";
+
     public RegisterPage()
     {
         InitializeComponent();
-        DisplayAlert("Ruta actual", userFile, "OK");
-
     }
 
     private async void OnRegisterClicked(object sender, EventArgs e)
@@ -84,9 +83,9 @@ public partial class RegisterPage : ContentPage
 
         // Checks if username or email already exists
         var lines = File.ReadAllLines(userFile).ToList();
-        foreach (string line in lines.Skip(1)) // Skips the header
+        for (int i = 1; i < lines.Count; i++) // Skip header
         {
-            string[] parts = line.Split(';');
+            string[] parts = lines[i].Split(';');
             if (parts.Length >= 3)
             {
                 if (parts[1].Trim().Equals(username, StringComparison.OrdinalIgnoreCase))
@@ -108,7 +107,9 @@ public partial class RegisterPage : ContentPage
 
         // Insert into first blank line if it exists, or add at the end
         bool inserted = false;
-        for (int i = 1; i < lines.Count; i++) // Skip header
+        
+        // Skips the header
+        for (int i = 1; i < lines.Count; i++)
         {
             if (string.IsNullOrWhiteSpace(lines[i]))
             {
