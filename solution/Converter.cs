@@ -15,9 +15,9 @@ namespace OOP
         {
             this.operations = new List<Conversion>(); 
 
-            this.operations.Add(new DecimalToBinary("Binary", "Decimal to Binary")); 
-            this.operations.Add(new DecimalToOctal("Binary", "Decimal to Octal")); 
-            this.operations.Add(new DecimalToHexadecimal("Hexadecimal", "Decimal To Hexadecimal")); 
+            this.operations.Add(new DecimalToBinary("Binary", "Decimal to Binary"));
+            this.operations.Add(new DecimalToOctal("Binary", "Decimal to Octal"));
+            this.operations.Add(new DecimalToHexadecimal("Hexadecimal", "Decimal To Hexadecimal"));
             this.operations.Add(new DecimalToTwoComplement("TwoComplement", "Decimal to Binary(TwoComplement)"));
             this.operations.Add(new BinaryToDecimal("Decimal", "Binary to Decimal")); 
             this.operations.Add(new TwoComplementToDecimal("Decimal", "Binary (TwoComplement) to Decimal"));
@@ -37,30 +37,29 @@ namespace OOP
             return this.operations.Count(); 
         }
 
-        // This method will not be neccessary 
         public int PrintOperations()
         {
             Console.WriteLine("-------------------");
-
+            
             for (int i = 1; i <= this.operations.Count(); i++)
             {
                 Console.WriteLine($"{i}. {this.operations[i-1].GetDefinition()} ");
+                
+            } 
+            Console.WriteLine($"{this.Exit()}. Exit"); 
 
-            }
-            Console.WriteLine($"{this.Exit()}. Exit");
-
-            string tmp = Console.ReadLine();
+            string tmp = Console.ReadLine(); 
 
             if (tmp == "")
             {
-                return this.GetNumberOperations() + 1;
+                return this.GetNumberOperations() + 1; 
             }
 
             int option = int.Parse(tmp);
 
-            return (option < 1 || option > this.GetNumberOperations()) ? this.Exit() + 1: option;
+            return (option < 1 || option > this.GetNumberOperations()) ? this.Exit() + 1: option; 
 
-
+           
 
         }
         
@@ -68,7 +67,7 @@ namespace OOP
 
         public string PerformConversion(int op, string input)
         {
-            
+
             this.operations[op-1].Validate(input); 
 
             if (this.operations[op-1].NeedBitSize())
