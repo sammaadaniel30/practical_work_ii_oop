@@ -30,3 +30,6 @@ Updated changes in Login, Conversor and Operations Page to make sure that the us
 the page. 
 
 
+### 17/05/2025 ###
+
+Added the neccessary files for the conversor to work. 
