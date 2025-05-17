@@ -76,6 +76,20 @@
                 </StackLayout>
             </Grid>
 
+            <Label Text="How many bits will you need? (Only applicable in operations where binary is necessary)"
+                       FontSize="18"
+                       TextColor="Black"
+                       FontFamily="Arial"
+                       Margin="10,10,10,0"/>
+                <Entry x:Name="BitsEntry"
+                       Placeholder="Place the amount of bits"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       FontFamily="Arial"
+                       FontSize="18"
+                       HeightRequest="50"
+                       Margin="10,0,10,10"/>
+
             <Grid ColumnDefinitions="*,*,*" Margin="0,20,0,0">
                 <Label Grid.Column="0"
                        Text="Operations"
@@ -113,6 +127,7 @@
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
+
 
         </VerticalStackLayout>
     </ScrollView>
