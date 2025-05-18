@@ -1,5 +1,22 @@
 # practical_work_ii_oop 
 
+## 1. COVER
+
+<div align="center">
+  <img src="../files/readme_files/COVER_OOP.png" alt="README.md cover of the project" width="95%">
+</div>
+
+## 2. TABLE OF CONTENTS
+
+- [1. COVER](#1-cover)
+- [2. TABLE OF CONTENTS](#2-table-of-contents)
+
+
+
+
+
+
+
 ## TIMELINE 
 
 ### 14/05/2025 ###
