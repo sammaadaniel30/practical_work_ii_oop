@@ -153,3 +153,5 @@ Added changed to allow negative integers to be converted into Two's Complement.
 Added method for the converting buttons in the ConverserPage. 
 
 Added instructions for the coverser. 
+
+Completed the documentation of the README.md file
