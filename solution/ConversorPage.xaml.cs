@@ -8,13 +8,15 @@ namespace practical_work_ii_oop;
 public partial class ConversorPage : ContentPage
 {
     private readonly string username;
-    private readonly Converter converter = new Converter();
+    private readonly Converter converter = new Converter(); // For calling each operations 
     private readonly string userFile = "files/users.csv";
 
     public ConversorPage(string username)
     {
         InitializeComponent();
         this.username = username; // Gets the username from login 
+        // Instructions 
+        
     }
 
     // Button 0
@@ -215,14 +217,34 @@ public partial class ConversorPage : ContentPage
             return;
         }
 
-        // As long as the text input is not null
         try
         {
-            string output = converter.PerformConversion(operationIndex, input);
-            InputEntry.Text = "";
-            InputEntry.Placeholder = $"Result: {output}";
+            string output;
 
-            UpdateUserOperationCount();
+            // We ask the bits for the operations which require a specific amount of links
+            if (operationIndex == 1 || operationIndex == 4)
+            {
+                string bitsInput = await DisplayPromptAsync("Define amount of bits", "Enter bit size (8, 16, 32 bits)", "OK", "Cancel"); // Added a textbox for the input of bits
+
+                if (string.IsNullOrWhiteSpace(bitsInput) || 
+                !int.TryParse(bitsInput, out int bits) || 
+                (bitsInput != "8" && bitsInput != "16" && bitsInput != "32"))
+                {              
+                    await DisplayAlert("Input Error", "Invalid input. Please enter 8, 16, or 32 bits.", "OK");
+                    return;
+                }
+                
+
+                output = converter.PerformConversion(operationIndex, input, bits);
+            }
+            else
+            {
+                output = converter.PerformConversion(operationIndex, input);
+            }
+
+            InputEntry.Text = "";
+            InputEntry.Text = $"Result: {output}"; // Text instead of text holder to show clearer the answer
+            UpdateUserOperationCount(); // Updates the number of users of the 
         }
         catch (Exception ex) // If the conversion does not work 
         {
