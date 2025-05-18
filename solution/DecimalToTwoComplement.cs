@@ -24,6 +24,7 @@ namespace OOP
         {
             int number = Int32.Parse(input); 
             
+            // Changed to allow for the implementation of negative values into Two's Complement
             int minVal = -(1 << (this.size - 1)); 
             int maxVal = (1 << (this.size - 1)) - 1; 
 
@@ -46,8 +47,8 @@ namespace OOP
         {
             int number = Int32.Parse(input); 
             
-            int minVal = -(1 << (this.size - 1)); 
-            int maxVal = (1 << (this.size - 1)) - 1; 
+            int minVal = -(1 << (bits - 1)); 
+            int maxVal = (1 << (bits - 1)) - 1;
 
             if (number < minVal || number > maxVal)
             throw new ArgumentOutOfRangeException(nameof(input), $"Number must fit with {bits} bits");
