@@ -33,3 +33,15 @@ the page.
 ### 17/05/2025 ###
 
 Added the neccessary files for the conversor to work. 
+
+### 18/05/2025 ###
+
+Fixed a typo in Decimal Files which prevented the conversions from working. 
+
+Removed the texbox for the bits and instead made a pop-up for the operations which require the bits values. 
+
+Added changed to allow negative integers to be converted into Two's Complement. 
+
+Added method for the converting buttons in the ConverserPage. 
+
+Added instructions for the coverser. 
