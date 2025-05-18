@@ -14,8 +14,7 @@ public partial class ConversorPage : ContentPage
     public ConversorPage(string username)
     {
         InitializeComponent();
-        this.username = username; // Gets the username from login 
-        // Instructions 
+        this.username = username; // Gets the username from login  
         
     }
 
