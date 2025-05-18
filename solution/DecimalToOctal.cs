@@ -26,7 +26,7 @@ namespace OOP
             {
                 int remainder = number % 8; 
                 octalString = remainder + octalString; 
-                number = 8; 
+                number /= 8; // Corrected the typo 
             }
 
             return octalString; 

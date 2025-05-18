@@ -25,7 +25,7 @@ namespace OOP
             {
                 int remainder = number % 2; 
                 binaryString = remainder + binaryString; 
-                number = 2; 
+                number /= 2;  // Correction of typo 
             }
 
             return binaryString; 

@@ -29,7 +29,7 @@ namespace OOP
             {
                 int remainder = number % 16; 
                 hexString = hexChars[remainder] + hexString; 
-                number = 16; 
+                number /= 16; // Corrected the typo 
             }
             
             return hexString; 
