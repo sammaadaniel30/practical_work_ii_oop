@@ -15,7 +15,13 @@ public partial class ConversorPage : ContentPage
     {
         InitializeComponent();
         this.username = username; // Gets the username from login  
+        ShowInstructions(); // Shows instructions 
         
+    }
+
+    private async void ShowInstructions()
+    { 
+        await DisplayAlert("Instructions", "After each successful conversion you must clear the textbox where the results show", "I understand");
     }
 
     // Button 0
