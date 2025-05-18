@@ -43,7 +43,7 @@ namespace OOP
                 for (int i = n - 1; i >= 0; i--)
                 {
 
-                    if (inverted[i] == 0)
+                    if (inverted[i] == '0') // Corrected a typo to now read chars 
                     {
                         inverted[i] = '1'; 
                         break; 
