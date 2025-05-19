@@ -64,7 +64,7 @@ This part includes in the creation of the different pages:
 
 
 <div align="center">
-  <img src="../files/readme_file/CLASS_DIAGRAM.png" alt="README.md image showing the class diagram" width="95%">
+  <img src="../files/readme_files/CLASS_DIAGRAM.png" alt="README.md image showing the class diagram" width="95%">
 </div>
 
 ### 4.3 DEVELOPMENT COSIDERATIONS 
