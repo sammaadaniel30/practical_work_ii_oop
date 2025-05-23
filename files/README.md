@@ -155,3 +155,9 @@ Added method for the converting buttons in the ConverserPage.
 Added instructions for the coverser. 
 
 Completed the documentation of the README.md file
+
+### 23/05/2025 ###
+
+Implemented the StreamReader and StreamWriter in their respective pages. 
+
+Did a method to make the header and create the file if any of these did not exist or were not created. 
