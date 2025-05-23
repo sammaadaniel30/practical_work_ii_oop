@@ -1,3 +1,5 @@
+using System; 
+using OOP;
 namespace practical_work_ii_oop;
 
 public partial class RegisterPage : ContentPage
@@ -8,7 +10,50 @@ public partial class RegisterPage : ContentPage
     public RegisterPage()
     {
         InitializeComponent();
+        EnsureUserFileHasHeader(); 
     }
+
+    private void EnsureUserFileHasHeader()
+    {
+        string header = "name;username;email;password;operations"; // Defines the header 
+
+        if (!File.Exists(userFile))
+        {
+            // File does exists, create file with the header
+            using (StreamWriter writer = new StreamWriter(userFile))
+            {
+                writer.WriteLine(header);
+            }
+        }
+        else
+        {
+            // If file exists verify if it has a header
+            string firstLine;
+
+            using (StreamReader reader = new StreamReader(userFile))
+            {
+                firstLine = reader.ReadLine();
+                if (firstLine != null && firstLine.Trim() == header)
+                {
+                    return; // If the header is correct then do nothing 
+                }
+
+                string remainingContent = reader.ReadToEnd();
+
+                using (StreamWriter writer = new StreamWriter(userFile))
+                {
+                    writer.WriteLine(header);
+
+                    if (!string.IsNullOrWhiteSpace(firstLine))
+                        writer.WriteLine(firstLine); // Write previous line if not header
+
+                    if (!string.IsNullOrWhiteSpace(remainingContent))
+                        writer.Write(remainingContent.TrimStart('\r', '\n'));
+                }
+            }
+        }
+    }
+
 
     private async void OnRegisterClicked(object sender, EventArgs e)
     {
@@ -72,44 +117,66 @@ public partial class RegisterPage : ContentPage
             return;
         }
 
-        // Ensure directory exists before writing
-        Directory.CreateDirectory(Path.GetDirectoryName(userFile));
+        // Checks if username or email already exists
+        bool usernameExists = false;
+        bool emailExists = false;
+        string separator = ";";
+        List<string> lines = new List<string>();
 
-        // Create file with header if it doesn't exist
-        if (!File.Exists(userFile))
+        // Read existing lines from the user file
+        using (StreamReader sr = new StreamReader(userFile))
         {
-            File.WriteAllText(userFile, "name;username;email;password;operations\n");
+            string line;
+            bool isFirstLine = true;
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (isFirstLine)
+                {
+                    lines.Add(line); // Keep header
+                    isFirstLine = false;
+                    continue;
+                }
+
+                string[] parts = line.Split(separator);
+
+                if (parts.Length >= 3)
+                {
+                    if (parts[1].Trim() == username)
+                    {
+                        usernameExists = true;
+                    }
+
+                    if (parts[2].Trim() == email)
+                    {
+                        emailExists = true;
+                    }
+                }
+
+                lines.Add(line);
+            }
         }
 
         // Checks if username or email already exists
-        var lines = File.ReadAllLines(userFile).ToList();
-        for (int i = 1; i < lines.Count; i++) // Skip header
+        if (usernameExists)
         {
-            string[] parts = lines[i].Split(';');
-            if (parts.Length >= 3)
-            {
-                if (parts[1].Trim().Equals(username, StringComparison.OrdinalIgnoreCase))
-                {
-                    await DisplayAlert("Error", "Username is already registered.", "OK");
-                    return;
-                }
+            await DisplayAlert("Error", "Username is already registered.", "OK");
+            return;
+        }
 
-                if (parts[2].Trim().Equals(email, StringComparison.OrdinalIgnoreCase))
-                {
-                    await DisplayAlert("Error", "Email is already registered.", "OK");
-                    return;
-                }
-            }
+        if (emailExists)
+        {
+            await DisplayAlert("Error", "Email is already registered.", "OK");
+            return;
         }
 
         // Formats the new user row
         string newUser = $"{name};{username};{email};{password};0";
 
-        // Insert into first blank line if it exists, or add at the end
         bool inserted = false;
-        
-        // Skips the header
-        for (int i = 1; i < lines.Count; i++)
+
+        // Looks for the first blank line to insert the user
+        for (int i = 1; i < lines.Count; i++) // Skip header
         {
             if (string.IsNullOrWhiteSpace(lines[i]))
             {
@@ -119,16 +186,24 @@ public partial class RegisterPage : ContentPage
             }
         }
 
+        // If no blank line found, add at the end
         if (!inserted)
         {
             lines.Add(newUser);
         }
 
-        // Write back all lines
-        File.WriteAllLines(userFile, lines);
+        // Write back all lines to the file
+        using (StreamWriter writer = new StreamWriter(userFile))
+        {
+            foreach (var updatedLine in lines)
+            {
+                await writer.WriteLineAsync(updatedLine);
+            }
+        }
 
         await DisplayAlert("Success", "User registered successfully!", "OK");
         await Navigation.PushAsync(new LoginPage());
+
     }
 
     // Validates the password requierments
