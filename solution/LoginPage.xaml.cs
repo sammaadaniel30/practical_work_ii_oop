@@ -1,3 +1,5 @@
+using System; 
+using OOP;
 namespace practical_work_ii_oop;
 
 public partial class LoginPage : ContentPage
@@ -7,6 +9,12 @@ public partial class LoginPage : ContentPage
     public LoginPage()
     {
         InitializeComponent();
+    }
+
+    // Shows the instructions for the converser
+    private void ShowInstructions()
+    {
+        DisplayAlert("Instructions", "After each conversion, you must clear the textbox where the results are shown.", "I understand");
     }
 
     // Log In Button 
@@ -27,18 +35,28 @@ public partial class LoginPage : ContentPage
             return;
         }
 
-        var lines = File.ReadAllLines(userFile);
-        
-        // Skips the header 
-        for (int i = 1; i < lines.Length; i++)
+        // Opens the file using StreamReader
+        using (StreamReader sr = new StreamReader(userFile))
         {
-            string[] parts = lines[i].Split(';');
-            if (parts.Length >= 4 &&
-                parts[1].Trim().Equals(username, StringComparison.OrdinalIgnoreCase) &&
-                parts[3].Trim() == password)
+            string line;
+            bool isFirstLine = true;
+
+            while ((line = sr.ReadLine()) != null)
             {
-                await Navigation.PushAsync(new ConversorPage(username));
-                return;
+                if (isFirstLine)
+                {
+                    isFirstLine = false;
+                    continue; // Skips the header
+                }
+
+                string[] parts = line.Split(';');
+
+                if (parts.Length >= 4 && parts[1].Trim() == username && parts[3].Trim() == password)
+                {
+                    ShowInstructions(); // Prints the instructions
+                    await Navigation.PushAsync(new ConversorPage(username)); // Navigates to the converter page
+                    return;
+                }
             }
         }
 

@@ -1,7 +1,6 @@
-using System.Threading.Tasks;
-using System.IO;
+using System; 
 using OOP;
-using System.Linq;
+
 
 namespace practical_work_ii_oop;
 
@@ -15,13 +14,6 @@ public partial class ConversorPage : ContentPage
     {
         InitializeComponent();
         this.username = username; // Gets the username from login  
-        ShowInstructions(); // Shows instructions 
-        
-    }
-
-    private async void ShowInstructions()
-    { 
-        await DisplayAlert("Instructions", "After each successful conversion you must clear the textbox where the results show", "I understand");
     }
 
     // Button 0
@@ -231,14 +223,14 @@ public partial class ConversorPage : ContentPage
             {
                 string bitsInput = await DisplayPromptAsync("Define amount of bits", "Enter bit size (8, 16, 32 bits)", "OK", "Cancel"); // Added a textbox for the input of bits
 
-                if (string.IsNullOrWhiteSpace(bitsInput) || 
-                !int.TryParse(bitsInput, out int bits) || 
+                if (string.IsNullOrWhiteSpace(bitsInput) ||
+                !int.TryParse(bitsInput, out int bits) ||
                 (bitsInput != "8" && bitsInput != "16" && bitsInput != "32"))
-                {              
+                {
                     await DisplayAlert("Input Error", "Invalid input. Please enter 8, 16, or 32 bits.", "OK");
                     return;
                 }
-                
+
 
                 output = converter.PerformConversion(operationIndex, input, bits);
             }
@@ -249,7 +241,7 @@ public partial class ConversorPage : ContentPage
 
             InputEntry.Text = "";
             InputEntry.Text = $"Result: {output}"; // Text instead of text holder to show clearer the answer
-            UpdateUserOperationCount(); // Updates the number of users of the 
+            UpdateUserOperationCount(); // Updates the number of operations for the user using the Conversor
         }
         catch (Exception ex) // If the conversion does not work 
         {
@@ -261,25 +253,40 @@ public partial class ConversorPage : ContentPage
     // Increments the value of operations for the user 
     private void UpdateUserOperationCount()
     {
+        // Checks if the file exists
         if (!File.Exists(userFile)) return;
 
-        var lines = File.ReadAllLines(userFile).ToList();
         string separator = ";";
+        List<string> lines = new List<string>(); 
 
-        for (int i = 1; i < lines.Count; i++)
+        // Reads all the lines from the file 
+        using (StreamReader reader = new StreamReader(userFile))
         {
-            string[] parts = lines[i].Split(separator);
-            if (parts.Length >= 5 && parts[1].Trim() == username)
+            string line;
+            while ((line = reader.ReadLine()) != null) // As long as no line is blank
             {
-                if (int.TryParse(parts[4], out int count))
+                string[] parts = line.Split(separator);
+
+                if (parts.Length >= 5 && parts[1].Trim() == username) // Checks for the username in the correct line 
                 {
-                    count++;
-                    parts[4] = count.ToString();
-                    lines[i] = string.Join(separator, parts);
-                    File.WriteAllLines(userFile, lines);
+                    int counter = Int32.Parse(parts[4]);
+                    counter++;
+                    parts[4] = counter.ToString();
+                    line = string.Join(separator, parts);
                 }
-                break;
+
+                lines.Add(line);
+            }
+        }
+
+        // Re-writing of the file 
+        using (StreamWriter writer = new StreamWriter(userFile))
+        {
+            foreach (string line in lines)
+            {
+                writer.WriteLine(line);
             }
         }
     }
+
 }

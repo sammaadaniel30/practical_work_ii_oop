@@ -1,3 +1,6 @@
+using System; 
+using OOP;
+
 namespace practical_work_ii_oop;
 
 public partial class OperationsPage : ContentPage
@@ -17,20 +20,31 @@ public partial class OperationsPage : ContentPage
     {
         if (!File.Exists(userFile)) return;
 
-        string[] lines = File.ReadAllLines(userFile);
         string separator = ";";
+        bool isFirstLine = true;
 
-        foreach (string line in lines.Skip(1))
+        // Opens the file using StreamReader
+        using (StreamReader sr = new StreamReader(userFile))
         {
-            string[] parts = line.Split(separator);
-            if (parts.Length >= 5 && parts[1].Trim().Equals(username, StringComparison.OrdinalIgnoreCase))
+            string? line;
+            while ((line = sr.ReadLine()) != null)
             {
-                NameEntry.Text = parts[0];
-                UsernameEntry.Text = parts[1];
-                EmailEntry.Text = parts[2];
-                PasswordEntry.Text = parts[3];
-                OperationsEntry.Text = parts[4];
-                break;
+                if (isFirstLine)
+                {
+                    isFirstLine = false; // Skips the header
+                    continue;
+                }
+
+                string[] parts = line.Split(separator);
+                if (parts.Length >= 5 && parts[1].Trim() == username)
+                {
+                    NameEntry.Text = parts[0];
+                    UsernameEntry.Text = parts[1];
+                    EmailEntry.Text = parts[2];
+                    PasswordEntry.Text = parts[3];
+                    OperationsEntry.Text = parts[4];
+                    break;
+                }
             }
         }
     }

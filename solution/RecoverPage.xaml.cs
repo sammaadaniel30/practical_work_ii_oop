@@ -1,8 +1,9 @@
+using System; 
+using OOP;
 namespace practical_work_ii_oop;
 
 public partial class RecoverPage : ContentPage
 {
-    // Ruta relativa al archivo de usuarios
     private readonly string userFile = "files/users.csv";
 
     public RecoverPage()
@@ -13,7 +14,7 @@ public partial class RecoverPage : ContentPage
     // Recover Button 
     private async void OnRecoverClicked(object sender, EventArgs e)
     {
-        
+
         if (NameEntry.Text == null || NameEntry.Text.Trim() == "" ||
             UsernameEntry.Text == null || UsernameEntry.Text.Trim() == "" ||
             EmailEntry.Text == null || EmailEntry.Text.Trim() == "")
@@ -47,45 +48,63 @@ public partial class RecoverPage : ContentPage
             return;
         }
 
-        
+
         if (!IsValidPassword(newPassword))
         {
             await DisplayAlert("Error", "Password must be at least 8 characters long, with uppercase, lowercase, number, and symbol.", "OK");
             return;
         }
 
-        
+
         if (!File.Exists(userFile))
         {
             await DisplayAlert("Error", "User database not found.", "OK");
             return;
         }
 
-        var lines = File.ReadAllLines(userFile).ToList();
         bool userFound = false;
         string separator = ";";
-        
-        // Skips the header
-        for (int i = 1; i < lines.Count; i++)
-        {
-            var parts = lines[i].Split(separator);
+        List<string> lines = new List<string>();
 
-            if (parts.Length >= 5 &&
-                parts[0].Trim().Equals(name, StringComparison.OrdinalIgnoreCase) &&
-                parts[1].Trim().Equals(username, StringComparison.OrdinalIgnoreCase) &&
-                parts[2].Trim().Equals(email, StringComparison.OrdinalIgnoreCase))
+        // Read lines using StreamReader
+        using (StreamReader sr = new StreamReader(userFile))
+        {
+            string line;
+            bool isFirstLine = true;
+
+            while ((line = sr.ReadLine()) != null)
             {
-                // If both passwords match
-                parts[3] = newPassword;
-                lines[i] = string.Join(separator, parts);
-                userFound = true;
-                break;
+                if (isFirstLine)
+                {
+                    lines.Add(line); // Keep header
+                    isFirstLine = false;
+                    continue;
+                }
+
+                var parts = line.Split(separator);
+
+                if (parts.Length >= 5 && parts[0].Trim() == name && parts[1].Trim() == username && parts[2].Trim() == email)
+                {
+                    parts[3] = newPassword; // Update password
+                    line = string.Join(separator, parts);
+                    userFound = true;
+                }
+
+                lines.Add(line); // Add updated or original line
             }
         }
 
+        // Write lines using StreamWriter
         if (userFound)
         {
-            File.WriteAllLines(userFile, lines);
+            using (StreamWriter sw = new StreamWriter(userFile))
+            {
+                foreach (string updatedLine in lines)
+                {
+                    sw.WriteLine(updatedLine);
+                }
+            }
+
             await DisplayAlert("Success", "Password updated successfully.", "OK");
             await Navigation.PushAsync(new LoginPage());
         }
@@ -94,6 +113,7 @@ public partial class RecoverPage : ContentPage
             await DisplayAlert("Error", "User information not found.", "OK");
         }
     }
+
 
     // Validates the password requirements
     private bool IsValidPassword(string password)
