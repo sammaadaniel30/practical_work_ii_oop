@@ -15,11 +15,13 @@ public partial class RegisterPage : ContentPage
 
     private void EnsureUserFileHasHeader()
     {
-        string header = "name;username;email;password;operations"; // Defines the header 
+        string header = "name;username;email;password;operations"; // Defines the header
+        string remainingContent;
+        string firstLine;
 
         if (!File.Exists(userFile))
         {
-            // File does exists, create file with the header
+            // File does not exist, create it with the header
             using (StreamWriter writer = new StreamWriter(userFile))
             {
                 writer.WriteLine(header);
@@ -27,32 +29,32 @@ public partial class RegisterPage : ContentPage
         }
         else
         {
-            // If file exists verify if it has a header
-            string firstLine;
-
+            // File exists, check if it has the correct header
             using (StreamReader reader = new StreamReader(userFile))
             {
                 firstLine = reader.ReadLine();
                 if (firstLine != null && firstLine.Trim() == header)
                 {
-                    return; // If the header is correct then do nothing 
+                    return; // Header is correct, do nothing
                 }
 
-                string remainingContent = reader.ReadToEnd();
+                remainingContent = reader.ReadToEnd(); // Read the rest of the file
+            }
 
-                using (StreamWriter writer = new StreamWriter(userFile))
-                {
-                    writer.WriteLine(header);
+            // Now safely write back with corrected header
+            using (StreamWriter writer = new StreamWriter(userFile))
+            {
+                writer.WriteLine(header);
 
-                    if (!string.IsNullOrWhiteSpace(firstLine))
-                        writer.WriteLine(firstLine); // Write previous line if not header
+                if (!string.IsNullOrWhiteSpace(firstLine))
+                    writer.WriteLine(firstLine); // Write previous first line (was not the correct header)
 
-                    if (!string.IsNullOrWhiteSpace(remainingContent))
-                        writer.Write(remainingContent.TrimStart('\r', '\n'));
-                }
+                if (!string.IsNullOrWhiteSpace(remainingContent))
+                    writer.Write(remainingContent.TrimStart('\r', '\n')); // Write remaining lines
             }
         }
     }
+
 
 
     private async void OnRegisterClicked(object sender, EventArgs e)
