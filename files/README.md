@@ -161,3 +161,7 @@ Completed the documentation of the README.md file
 Implemented the StreamReader and StreamWriter in their respective pages. 
 
 Did a method to make the header and create the file if any of these did not exist or were not created. 
+
+### 25/05/2025 ###
+
+Changed the name of the folder solution to be named to the name src. As the project statement states. 
